@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mon site — Pair</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <img class="logo" src="assets/logo.png" alt="Logo" />
+      <h1>Mon Pair</h1>
+      <p class="subtitle">Un petit site simple, déployé sur Render</p>
+      <a class="cta" id="cta" href="#get">Commencer</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="get" class="card">
+      <h2>Générateur / Pair</h2>
+      <p>Colle ton texte ci-dessous pour générer une paire :</p>
+      <textarea id="input" placeholder="Ton texte ici..." rows="5"></textarea>
+      <div class="controls">
+        <button id="make">Générer</button>
+        <button id="clear">Effacer</button>
+      </div>
+      <h3>Résultat</h3>
+      <pre id="output" class="output"></pre>
+      <p class="note">Personnalise les comportements dans <code>script.js</code>.</p>
+    </section>
+
+    <section class="card small">
+      <h3>À propos</h3>
+      <p>Ce modèle est statique, facile à personnaliser et à déployer.</p>
+      <ul>
+        <li>Remplace <code>assets/logo.png</code> par ton logo</li>
+        <li>Modifie les couleurs dans <code>style.css</code></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> — Mon Pair</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
