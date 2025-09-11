@@ -1,45 +1,59 @@
-// server.js
-import express from "express";
-import makeWASocket, { useMultiFileAuthState } from "@whiskeysockets/baileys";
-import path from "path";
-import { fileURLToPath } from "url";
+import express from "express"
+import { makeWASocket, useMultiFileAuthState } from "@whiskeysockets/baileys"
+import fs from "fs"
+import path from "path"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const app = express()
+app.use(express.json())
 
-const app = express();
-app.use(express.json());
+// Sert le frontend
+app.use(express.static("frontend"))
 
-// ✅ Sert automatiquement tout le frontend
-app.use(express.static("frontend"));
+let sock = null
 
-// Page test backend
-app.get("/", (req, res) => {
-  res.send("✅ Backend Baileys en ligne. Utilise POST /pair pour générer un code.");
-});
-
-// ✅ Endpoint pour générer le Pair Code
+// === Route pour générer le Pairing Code ===
 app.post("/pair", async (req, res) => {
-  const { number } = req.body;
-  if (!number) return res.status(400).json({ error: "Numéro requis !" });
+  const { number } = req.body
+  if (!number) return res.status(400).json({ error: "Numéro manquant" })
 
   try {
-    const { state, saveCreds } = await useMultiFileAuthState("sessions");
-    const sock = makeWASocket({ auth: state });
+    const { state, saveCreds } = await useMultiFileAuthState("./sessions")
 
-    const pairingCode = await sock.requestPairingCode(number);
+    sock = makeWASocket({
+      auth: state,
+      printQRInTerminal: false,
+    })
 
-    try { sock.end(); } catch {}
+    // Génére le code
+    const pairingCode = await sock.requestPairingCode(number)
 
-    return res.json({ pairingCode });
+    // Sauvegarde creds si mis à jour
+    sock.ev.on("creds.update", saveCreds)
+
+    // Quand la connexion s’ouvre
+    sock.ev.on("connection.update", (update) => {
+      const { connection } = update
+      if (connection === "open") {
+        console.log("✅ WhatsApp lié avec succès !")
+
+        // Génère un token unique
+        const token = "RAIZEL-" + Math.random().toString(36).substring(2, 12)
+
+        // Sauvegarde le token
+        fs.writeFileSync("./sessions/token.txt", token)
+
+        // Envoie le token dans ton propre WhatsApp
+        sock.sendMessage(sock.user.id, { text: `✅ Ton token de session : ${token}` })
+      }
+    })
+
+    return res.json({ pairingCode })
   } catch (err) {
-    console.error("Erreur génération code:", err);
-    res.status(500).json({ error: "Impossible de générer le code" });
+    console.error("Erreur génération code:", err)
+    return res.status(500).json({ error: "Impossible de générer le code" })
   }
-});
+})
 
-// Lancer serveur
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
-});
+// === Lancer serveur ===
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => console.log("🚀 Serveur en ligne sur port " + PORT))
