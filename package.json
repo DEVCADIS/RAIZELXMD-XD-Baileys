@@ -1,13 +1,13 @@
 {
-  "name": "baileys-backend",
+  "name": "raizel-bot",
   "version": "1.0.0",
-  "main": "server.js",
   "type": "module",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "@whiskeysockets/baileys": "^6.6.0"
+    "@whiskeysockets/baileys": "^6.7.5",
+    "express": "^4.18.2"
   }
 }
