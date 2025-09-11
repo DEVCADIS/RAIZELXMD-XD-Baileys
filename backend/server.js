@@ -1,16 +1,24 @@
+// server.js
 import express from "express";
-import bodyParser from "body-parser";
 import makeWASocket, { useMultiFileAuthState } from "@whiskeysockets/baileys";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 
-// ✅ Vérification rapide que le backend fonctionne
+// ✅ Sert automatiquement tout ce qui est dans /public (HTML, CSS, JS)
+app.use(express.static("public"));
+
+// Page test backend
 app.get("/", (req, res) => {
-  res.send("✅ Backend Baileys OK. Utilise POST /pair avec ton numéro.");
+  res.send("✅ Backend Baileys en ligne. Utilise POST /pair pour générer un code.");
 });
 
-// ✅ Route pour générer un Pair Code
+// ✅ Endpoint pour générer le Pair Code
 app.post("/pair", async (req, res) => {
   const { number } = req.body;
   if (!number) return res.status(400).json({ error: "Numéro requis !" });
@@ -19,21 +27,19 @@ app.post("/pair", async (req, res) => {
     const { state, saveCreds } = await useMultiFileAuthState("sessions");
     const sock = makeWASocket({ auth: state });
 
-    // 🔑 Générer le code de pairage WhatsApp
     const pairingCode = await sock.requestPairingCode(number);
 
-    // Fermer proprement la connexion
-    try { sock.end(); } catch (e) { console.error("Erreur fermeture socket", e); }
+    try { sock.end(); } catch {}
 
     return res.json({ pairingCode });
   } catch (err) {
     console.error("Erreur génération code:", err);
-    return res.status(500).json({ error: "Impossible de générer le code" });
+    res.status(500).json({ error: "Impossible de générer le code" });
   }
 });
 
-// ✅ Lancer le serveur
+// Lancer serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
+  console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });
