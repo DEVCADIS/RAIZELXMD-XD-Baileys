@@ -7,7 +7,7 @@ form.addEventListener("submit", async (e) => {
   const number = input.value;
 
   try {
-    const res = await fetch("https://raizelxmd-xd-baileys3.onrender.com/pair", {
+    const res = await fetch("https://raizelxmd-xd-baileys4.onrender.com", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ number }),
