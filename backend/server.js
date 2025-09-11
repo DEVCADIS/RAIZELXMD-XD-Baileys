@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 
-// ✅ Sert automatiquement tout ce qui est dans /public (HTML, CSS, JS)
-app.use(express.static("public"));
+// ✅ Sert automatiquement tout le frontend
+app.use(express.static("frontend"));
 
 // Page test backend
 app.get("/", (req, res) => {
