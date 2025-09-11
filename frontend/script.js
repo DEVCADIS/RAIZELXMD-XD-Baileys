@@ -1,32 +1,25 @@
-const API_URL = https://raizelxmd-xd-baileys3.onrender.com
+const form = document.querySelector("form");
+const input = document.querySelector("input");
+const result = document.querySelector("#result");
 
-document.getElementById("generate").addEventListener("click", async () => {
-  const number = document.getElementById("number").value.trim()
-  const result = document.getElementById("result")
-
-  if (!number) {
-    result.textContent = "⚠️ Veuillez entrer un numéro"
-    result.style.color = "orange"
-    return
-  }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const number = input.value;
 
   try {
-    const res = await fetch(`${API_URL}/pair`, {
+    const res = await fetch("https://raizelxmd-xd-baileys3.onrender.com/pair", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ number })
-    })
+      body: JSON.stringify({ number }),
+    });
 
-    const data = await res.json()
+    const data = await res.json();
     if (data.pairingCode) {
-      result.textContent = `✅ Code : ${data.pairingCode}`
-      result.style.color = "limegreen"
+      result.innerHTML = `✅ Code: <b>${data.pairingCode}</b>`;
     } else {
-      result.textContent = `❌ Erreur : ${data.error || "Impossible de générer"}`
-      result.style.color = "red"
+      result.innerHTML = "❌ Erreur : " + (data.error || "Impossible de générer le code");
     }
   } catch (err) {
-    result.textContent = "🚨 Erreur de connexion"
-    result.style.color = "red"
+    result.innerHTML = "🚨 Erreur de connexion au serveur";
   }
-})
+});
