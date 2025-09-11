@@ -1,49 +1,39 @@
-const genBtn = document.getElementById('gen');
-const copyBtn = document.getElementById('copy');
-const numInput = document.getElementById('num');
-const codeDiv = document.getElementById('code');
-const notify = document.getElementById('notify');
+const API_URL = "https://raizelxmd-xd-baileys3.onrender.com";
 
-// Replace with your backend URL after deploy
-let BACKEND_URL = "https://TON-BACKEND-URL.onrender.com"; // <-- replace me
+document.getElementById("generate").addEventListener("click", async () => {
+  const number = document.getElementById("number").value.trim();
+  const result = document.getElementById("result");
 
-function showNotify(text){ notify.hidden = false; notify.textContent = text; }
-function hideNotify(){ notify.hidden = true; }
-
-genBtn.addEventListener('click', async () => {
-  const num = numInput.value.trim();
-  if(!num){ codeDiv.innerHTML = '<span style="color:#ef4444;font-size:16px">Entrez un numéro valide</span>'; return; }
-
-  showNotify('Ton code arrive…');
-  codeDiv.textContent = '';
+  if (!number) {
+    result.textContent = "⚠️ Veuillez entrer un numéro";
+    result.style.color = "orange";
+    return;
+  }
 
   try {
-    const res = await fetch(BACKEND_URL + "/pair", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ number: num })
+    const res = await fetch(`${API_URL}/pair`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ number })
     });
+
     const data = await res.json();
-    hideNotify();
 
-    if(res.ok && data.pairingCode){
-      codeDiv.textContent = data.pairingCode;
+    if (data.pairingCode) {
+      result.textContent = `✅ Code: ${data.pairingCode}`;
+      result.style.color = "limegreen";
+
+      // bouton copier
+      document.getElementById("copy").onclick = () => {
+        navigator.clipboard.writeText(data.pairingCode);
+        alert("Code copié !");
+      };
     } else {
-      codeDiv.innerHTML = '<span style="color:#ef4444;font-size:16px">Erreur: ' + (data.error || 'Impossible de générer') + '</span>';
+      result.textContent = `❌ Erreur: ${data.error || "Impossible de générer"}`;
+      result.style.color = "red";
     }
-  } catch (err){
-    hideNotify();
-    codeDiv.innerHTML = '<span style="color:#ef4444;font-size:16px">Erreur de connexion</span>';
-    console.error(err);
+  } catch (err) {
+    result.textContent = "🚨 Erreur de connexion au serveur";
+    result.style.color = "red";
   }
-});
-
-copyBtn.addEventListener('click', () => {
-  const code = codeDiv.textContent.trim();
-  if(!code) return;
-  navigator.clipboard.writeText(code).then(()=>{
-    alert('✅ Code copié');
-  }).catch(()=>{
-    alert('❌ Impossible de copier');
-  });
 });
