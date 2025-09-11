@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pair Code Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    input { padding: 10px; font-size: 16px; }
+    button { padding: 10px 20px; font-size: 16px; margin-left: 10px; }
+    pre { background: #f4f4f4; padding: 15px; margin-top: 20px; text-align: left; }
+  </style>
+</head>
+<body>
+  <h2>🔑 Obtenir un Pair Code WhatsApp</h2>
+  <input type="text" id="number" placeholder="Ex: +237699777530">
+  <button onclick="getCode()">Générer</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function getCode() {
+      const number = document.getElementById("number").value;
+      const res = await fetch("/pair", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ number })
+      });
+      const data = await res.json();
+      document.getElementById("result").innerText = 
+        data.pairingCode ? "✅ Code : " + data.pairingCode : "❌ Erreur : " + JSON.stringify(data);
+    }
+  </script>
+</body>
+</html>
