@@ -1,6 +1,6 @@
 # Mon Pair Site
 
-Un petit site statique de démonstration, inspiré de **keithpair2.onrender.com**, prêt à déployer gratuitement sur Render, Vercel ou Netlify.
+Un petit site statique de démonstration, inspiré de **de raizel**, prêt à déployer gratuitement sur Render, Vercel ou Netlify.
 
 ## 📂 Structure du projet
 
