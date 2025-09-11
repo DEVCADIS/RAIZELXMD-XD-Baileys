@@ -2,16 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Raizel Pairing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raizel Bot</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🔑 Générer un Pair Code</h1>
-    <input id="number" type="text" placeholder="+237699000000" />
-    <button id="generate">Générer</button>
-    <p id="result"></p>
+  <div class="header">
+    <img src="https://files.catbox.moe/iqril4.jpeg" alt="Dev Raizel" class="logo">
+    <h1>🚀 Dev Raizel</h1>
   </div>
+
+  <div class="container">
+    <h2>🔑 Générer un Pair Code</h2>
+    <form>
+      <input type="text" placeholder="+237..." required>
+      <button type="submit">Générer</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
