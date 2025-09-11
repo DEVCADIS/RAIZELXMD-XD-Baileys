@@ -1,26 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pairing Code — Raizel Bot</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raizel Bot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>🤖 Raizel Bot</h1>
-      <p class="subtitle">Entrez le numéro et générez le pairing code</p>
+  <div class="container">
+    <h1>🤖 Raizel Bot</h1>
+    <p>Entrez le numéro et générez le pairing code</p>
 
-      <input id="num" type="text" placeholder="+237699777530" />
-      <div class="controls">
-        <button id="gen">🔑 Générer</button>
-        <button id="copy">📋 Copier</button>
-      </div>
+    <input id="number" type="text" placeholder="+237699777530" />
 
-      <div id="notify" class="notify" hidden>Ton code arrive…</div>
-      <div id="code" class="code" aria-live="polite"></div>
+    <div class="buttons">
+      <button id="generate">🔑 Générer</button>
+      <button id="copy">📋 Copier</button>
     </div>
+
+    <p id="result"></p>
   </div>
 
   <script src="script.js"></script>
